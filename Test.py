@@ -1,15 +1,17 @@
 from manim import *
 from Components import GradientBackground
 
-
 class Test(Scene):
     def construct(self):
 
-        # add background
-        background = GradientBackground(n_colors=10)
-        self.add(background)
-        self.play(
-            FadeIn(background, run_time=2, rate_func=linear),
-        )
+        point = Dot(color=WHITE).move_to(ORIGIN)
+        self.add(point)
 
-        self.wait(10)
+        path = TracedPath(point.get_center, stroke_color=WHITE, stroke_width=2, dissipating_time=0.1)
+        self.add(path)
+
+        self.play(
+            point.animate.move_to(UP * 2),
+            run_time=2,
+            rate_func=linear
+        )
