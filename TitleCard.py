@@ -1,10 +1,9 @@
 from manim import *
 import argparse
+from Components import GradientBackground
 
-config.background_color = color_gradient(
-    [BLUE_E, BLUE_D, BLUE_C, BLUE_B, BLUE_A],
-    length_of_output=4
-)
+
+config.quality = "fourk_quality"
 
 
 class TitleCard(Scene):
@@ -15,43 +14,43 @@ class TitleCard(Scene):
 
     def construct(self):
 
+        # Add gradient background
+        background = GradientBackground(n_colors=10)
+        self.add(background)
+
+        # Add the title
         title = Text(self.title, font_size=96)
         self.add(title)
 
         horizontal_buffer_units = 0.5
 
-        line_top = Line(
-            title.get_critical_point(LEFT) + horizontal_buffer_units * LEFT,
-            title.get_critical_point(RIGHT) + horizontal_buffer_units * RIGHT,
-        )
-        line_top.next_to(title, 2.5 * UP)
-
+        # bottom line
         line_bottom = Line(
             title.get_critical_point(LEFT) + horizontal_buffer_units * LEFT,
             title.get_critical_point(RIGHT) + horizontal_buffer_units * RIGHT,
         )
         line_bottom.next_to(title, 2.5 * DOWN)
 
+        # chapter number
         number = Tex(self.chapter_number, font_size=72)
-        number.move_to(line_top.get_center())
-        number.set_z_index(1)
+        number.next_to(title, 2.5 * UP)
 
-        cover = Rectangle(
-            fill_color=BLACK,
-            fill_opacity=1,
-            width=number.get_width() + 0.7,
-            height=0.2,
-            stroke_width=0,
+        top_line_left = Line(
+            [line_bottom.get_critical_point(LEFT)[0], number.get_y(), 0],
+            [number.get_critical_point(LEFT)[0] - 0.2, number.get_y(), 0],
+        )
+        top_line_right = Line(
+            [line_bottom.get_critical_point(RIGHT)[0], number.get_y(), 0],
+            [number.get_critical_point(RIGHT)[0] + 0.2, number.get_y(), 0],
         )
 
-        cover.move_to(line_top.get_center())
-
-        self.add(line_top, line_bottom, number, cover)
+        self.add(line_bottom, number, top_line_left, top_line_right)
 
         self.play(
             Write(title, run_time=2),
             Write(number, run_time=1.5),
-            GrowFromCenter(line_top, run_time=1.5),
+            GrowFromCenter(top_line_left, run_time=1.5),
+            GrowFromCenter(top_line_right, run_time=1.5),
             GrowFromCenter(line_bottom, run_time=1.5),
         )
 
