@@ -1,6 +1,11 @@
 from manim import *
 import argparse
 
+config.background_color = color_gradient(
+    [BLUE_E, BLUE_D, BLUE_C, BLUE_B, BLUE_A],
+    length_of_output=4
+)
+
 
 class TitleCard(Scene):
     def __init__(self, title="Title Card", chapter_number="Chapter 1", **kwargs):
@@ -71,4 +76,4 @@ if __name__ == "__main__":
     chapter_number = args.chapter_number
 
     scene = TitleCard(title=title, chapter_number=chapter_number)
-    scene.render()
+    scene.render(preview=True)
